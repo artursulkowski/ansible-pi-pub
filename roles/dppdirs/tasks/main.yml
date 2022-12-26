@@ -1,0 +1,13 @@
+# file: roles/dppdirs/tasks/main.yml
+# data processing pipeline - creation of directories
+# I've decided to change a structure and use sub-task for a purpose of creating each directory 
+# See https://stackoverflow.com/questions/33701369/how-can-ansible-loop-over-a-sequence-of-tasks
+---
+- name: 'load variables'
+  include_vars: ./vars/dirs.yml 
+
+- name: "Create multiple directories only if they do not exist"
+  include_tasks: "check-and-create-dir.yml"
+  loop: "{{ listdirs }}"
+  loop_control:
+    loop_var: dirtocreate

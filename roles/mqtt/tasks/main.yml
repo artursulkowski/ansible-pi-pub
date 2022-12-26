@@ -1,0 +1,16 @@
+# file: roles/mqtt/tasks/main.yml
+# Copies mosquitto configuration file. Directory needs to be created in advance.
+---
+- name: 'Check if mosquitto file was created'
+  stat:
+    path: "{{homepath}}mosquitto/config/mosquitto.conf"
+  register: mosquitto_file
+
+- name: 'Copy mosquitto.conf file'
+  become: true
+  become_user: pi
+  copy:
+    src:  ../files/mosquitto.conf
+    dest: "{{homepath}}mosquitto/config/mosquitto.conf"
+    owner: pi
+  when: not mosquitto_file.stat.exists

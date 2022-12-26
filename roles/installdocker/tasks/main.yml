@@ -1,0 +1,39 @@
+# file: roles/installdocker/tasks/main.yml
+---
+- name: 'get docker install'
+  action: get_url url=https://get.docker.com dest=/home/pi/get-docker.sh
+
+- name: 'install docker'
+  action: shell /bin/sh /home/pi/get-docker.sh
+
+## setup group and user
+- name: create docker group
+  become: true
+  group:
+    name: docker
+    state: present
+
+- name: add user to group
+  become: true
+  user:
+    name: "pi"
+    groups: docker
+    append: true
+
+## Docker compose install. Using apt-get docker-compose as PIP version had building issues.
+- name: install docker compose
+  become: true
+  apt:
+    update_cache: yes
+    state: latest
+    name: docker-compose
+
+## Reboot is required for docker deamon correct start
+- name: Reboot host and wait for it to restart
+  reboot:
+    msg: "Reboot initiated by Ansible"
+    connect_timeout: 5
+    reboot_timeout: 600
+    pre_reboot_delay: 0
+    post_reboot_delay: 10
+    test_command: whoami

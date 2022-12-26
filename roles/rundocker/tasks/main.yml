@@ -1,0 +1,15 @@
+# file: roles/rundocker/tasks/main.yml
+---
+- name: 'copy docker-compose file'
+  become: true
+  become_user: pi
+  copy:
+    src:  ../files/docker-compose.yml
+    dest: /home/pi/docker-compose.yml
+    owner: pi
+
+- name: Run container
+  become: true
+  become_user: root
+  shell:
+    cmd: "docker-compose up -d"

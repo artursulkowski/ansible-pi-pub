@@ -1,0 +1,18 @@
+---
+- name: 'Ansible playbook'
+  hosts: pi3devices
+  roles:
+    - role: softwareupdate
+      tags: update, allinone
+    - role: installdocker
+      tags: dockerinstall, allinone
+    - role: dppdirs
+      tags: dppdirectories, dpconfig , allinone
+    - role: mqtt
+      tags: mqtt, dpconfig, allinone
+    - role: telegraf
+      tags: telegraf, dpconfig, allinone
+    - role: rundocker
+      tags: dockerrun, allinone
+  remote_user: pi
+  become: yes

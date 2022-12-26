@@ -1,0 +1,18 @@
+# file: roles/dppdirs/tasks/check-and-create-dir.yml
+# Sub-tasks creating a directory only when it doesn't exist.
+---
+- name: 'Check if dir exists'
+  stat:     
+    path: "{{homepath}}{{dirtocreate['dirname']}}"
+  register: tmp_result
+
+- name: 'Create a single dir'
+  become: true
+  become_user: pi
+  file:
+    path: "{{homepath}}{{dirtocreate['dirname']}}"
+    owner: pi
+    recurse: yes
+    mode: "{{dirtocreate['perm']}}"
+    state: directory
+  when: not tmp_result.stat.exists

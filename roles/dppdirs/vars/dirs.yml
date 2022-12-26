@@ -1,0 +1,15 @@
+# file: roles/dppdirs/vars/dirs.yml
+---
+listdirs:
+  - name: 'mosquitto'
+    dirname: 'mosquitto/config'
+    perm: '777'
+  - name: 'influxdb'
+    dirname: 'influxdb'
+    perm: '777'
+  - name: 'grafana'
+    dirname: 'grafana'
+    perm: '777'
+  - name: 'telegraf'
+    dirname: 'telegraf'
+    perm: '777'

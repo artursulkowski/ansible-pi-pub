@@ -1,0 +1,16 @@
+# file: roles/telegraf/tasks/main.yml
+# Copies telegraf configuration file. Directory needs to be created in advance.
+---
+- name: 'Check if telegraf file was created'
+  stat:
+    path: "{{homepath}}telegraf/telegraf.conf"
+  register: telegraf_file
+
+- name: 'copy telegraf file'
+  become: true
+  become_user: pi
+  copy:
+    src:  ../files/telegraf.conf
+    dest: "{{homepath}}telegraf/telegraf.conf"
+    owner: pi
+  when: not telegraf_file.stat.exists

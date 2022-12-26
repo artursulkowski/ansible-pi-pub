@@ -1,0 +1,41 @@
+version: "3.3"
+
+services:
+  mqtt:
+    image: eclipse-mosquitto:2.0.14-openssl
+    container_name: mqtt
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - /home/pi/bc_data/mosquitto:/mosquitto
+    restart: unless-stopped
+
+  influxdb:
+    image: influxdb:1.8
+    container_name: influxdb
+
+    volumes:
+      - /home/pi/bc_data/influxdb:/var/lib/influxdb
+    restart: unless-stopped
+
+  telegraf:
+    image: telegraf:1.21
+    container_name: telegraf
+    depends_on:
+      - influxdb
+    ports:
+      - "8094:8094" #UDP port - can be used later.
+    volumes:
+      - /home/pi/bc_data/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:8.3.3
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - /home/pi/bc_data/grafana:/var/lib/grafana
+    restart: unless-stopped
+
